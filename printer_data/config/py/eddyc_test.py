@@ -1,34 +1,54 @@
-# eddyc_test.py
-# Script para registrar tests de repetibilidad del Eddy NG
-
-import os
+#!/usr/bin/env python3
+import sys
 import time
+import json
+from pathlib import Path
+from datetime import datetime
 
-class EddyCTest:
-    def __init__(self, config):
-        self.printer = config.get_printer()
+OUTPUT = Path("/home/pi/klipper_logs/eddy_test")
 
-        log_dir = "/home/pi/printer_data/logs"
-        os.makedirs(log_dir, exist_ok=True)
+def read_eddy_value():
+    """
+    Lee el valor del Eddy NG desde la API de Klipper (consulta stats)
+    """
+    try:
+        import requests
+        r = requests.get("http://127.0.0.1:7125/probe/last")
+        data = r.json()
+        return data["last_z_result"]
+    except:
+        return None
 
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        self.log_path = f"{log_dir}/eddy_test_{timestamp}.txt"
+def main():
+    if len(sys.argv) != 7:
+        print("ARGS INVALIDOS")
+        return
 
-        with open(self.log_path, "w") as f:
-            f.write("Eddy NG Test\n")
-            f.write("=========================\n\n")
+    nx, ny, sx, sy, ztarget, cycle = sys.argv[1:]
+    nx, ny = float(nx), float(ny)
+    sx, sy = float(sx), float(sy)
+    ztarget = float(ztarget)
+    cycle = int(cycle)
 
-    def record_point(self, nozzle_x, nozzle_y, sensor_x, sensor_y, z, reading):
-        with open(self.log_path, "a") as f:
-            f.write(
-                f"Nozzle=({nozzle_x:.2f},{nozzle_y:.2f}), "
-                f"Sensor=({sensor_x:.2f},{sensor_y:.2f}), "
-                f"Z={z:.3f}, Eddy={reading}\n"
-            )
+    # leer Eddy
+    value = read_eddy_value()
 
-    def record_message(self, msg):
-        with open(self.log_path, "a") as f:
-            f.write(msg + "\n")
+    # asegurar carpeta
+    OUTPUT.mkdir(parents=True, exist_ok=True)
 
-def load_config(config):
-    return EddyCTest(config)
+    # Guardar en JSON
+    entry = {
+        "timestamp": datetime.now().isoformat(),
+        "cycle": cycle,
+        "nozzle": [nx, ny],
+        "sensor": [sx, sy],
+        "target_z": ztarget,
+        "eddy": value,
+    }
+
+    with open(OUTPUT / "raw.jsonl", "a") as f:
+        f.write(json.dumps(entry) + "\n")
+
+
+if __name__ == "__main__":
+    main()
