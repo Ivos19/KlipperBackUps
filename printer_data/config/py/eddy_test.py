@@ -8,9 +8,10 @@ from datetime import datetime
 OUTPUT = Path("/home/pi/klipper_logs/eddy_test")
 
 def read_eddy_value():
-    """
-    Lee el valor del Eddy NG desde la API de Klipper (consulta stats)
-    """
+
+    # Lee el valor del Eddy NG desde la API de Klipper (consulta stats)
+
+    print("Lee el valor del Eddy NG desde la API de Klipper (consulta stats)")
     try:
         import requests
         r = requests.get("http://127.0.0.1:7125/probe/last")
@@ -20,6 +21,7 @@ def read_eddy_value():
         return None
 
 def main():
+    print("Main py script")
     if len(sys.argv) != 7:
         print("ARGS INVALIDOS")
         return
