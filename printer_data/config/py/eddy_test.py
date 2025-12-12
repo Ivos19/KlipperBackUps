@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+print("DEBUG argv:", sys.argv)
 import time
 import json
 from pathlib import Path
