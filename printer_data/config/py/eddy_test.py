@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 import sys
-print("DEBUG argv:", sys.argv)
-print("DEBUG len(sys.argv):", len(sys.argv))
-print("DEBUG sys.argv[1:]:", sys.argv[1:] if len(sys.argv) > 1 else "NO ARGS")
 import requests
 import time
 import json
