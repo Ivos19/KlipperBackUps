@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-OUTPUT = Path("/home/pi/klipper_logs/eddy_test")
+OUTPUT = Path("/home/biqu/printer_data/config/py") #Path("/home/pi/klipper_logs/eddy_test")
 
 def read_eddy_value():
 
