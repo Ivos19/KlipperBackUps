@@ -21,6 +21,7 @@ def read_eddy_value():
         params={OBJ: ""}
     )
         data = r.json()
+        print(f"Valor en z: {data["last_z_result"]}")
         return data["last_z_result"]
     except:
         return None
@@ -65,7 +66,7 @@ def main():
     cycle = int(cycle)
 
     # leer Eddy
-    gcode("PEPS")
+    
     wait_idle()
     value = read_eddy_value()
 
