@@ -54,7 +54,7 @@ def main():
         "eddy": value,
     }
 
-    with open(OUTPUT / "raw.jsonl", "a") as f:
+    with open(OUTPUT / "EddyBedCheck.json", "a") as f:
         f.write(json.dumps(entry) + "\n")
 
 
