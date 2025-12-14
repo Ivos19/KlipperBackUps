@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 import sys
-print("DEBUG argv:", sys.argv)
-print("DEBUG len(sys.argv):", len(sys.argv))
-print("DEBUG sys.argv[1:]:", sys.argv[1:] if len(sys.argv) > 1 else "NO ARGS")
 import time
 import json
 from pathlib import Path
 from datetime import datetime
 
-OUTPUT = Path("/home/biqu/printer_data/config/py") #Path("/home/pi/klipper_logs/eddy_test")
+OUTPUT = Path("/home/biqu/printer_data/config/py")
 
 def read_eddy_value():
 
@@ -17,9 +14,11 @@ def read_eddy_value():
     print("Lee el valor del Eddy NG desde la API de Klipper (consulta stats)")
     try:
         import requests
-        r = requests.get("http://127.0.0.1:7125/probe/last")
-        data = r.json()
-        return data["last_z_result"]
+        r = requests.get(
+        f"{MOONRAKER}/printer/objects/query",
+        params={OBJ: ""}
+        ).json()
+        return r["last_z_result"]
     except:
         return None
 
@@ -39,6 +38,7 @@ def main():
     cycle = int(cycle)
 
     # leer Eddy
+    wait_idle()
     value = read_eddy_value()
 
     # asegurar carpeta
