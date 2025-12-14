@@ -1,0 +1,5 @@
+{"timestamp": "2025-12-14T16:18:47.898991", "cycle": 0, "nozzle": [50.0, 98.0], "sensor": [50.0, 50.0], "target_z": 1.0, "eddy": null}
+{"timestamp": "2025-12-14T16:18:48.226635", "cycle": 0, "nozzle": [250.0, 98.0], "sensor": [250.0, 50.0], "target_z": 1.0, "eddy": null}
+{"timestamp": "2025-12-14T16:18:49.195829", "cycle": 0, "nozzle": [250.0, 298.0], "sensor": [250.0, 250.0], "target_z": 1.0, "eddy": null}
+{"timestamp": "2025-12-14T16:18:50.248931", "cycle": 0, "nozzle": [50.0, 298.0], "sensor": [50.0, 250.0], "target_z": 1.0, "eddy": null}
+{"timestamp": "2025-12-14T16:18:51.278680", "cycle": 0, "nozzle": [150.0, 198.0], "sensor": [150.0, 150.0], "target_z": 1.0, "eddy": null}
