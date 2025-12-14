@@ -26,8 +26,17 @@ def moonraker_get(path, params=None):
 def wait_idle():
     while True:
         r = moonraker_get("/printer/objects/query", {"toolhead": ""})
-        if r["result"]["status"]["toolhead"]["status"] == "idle":
+
+        status = (
+            r.get("result", {})
+             .get("status", {})
+             .get("toolhead", {})
+             .get("status")
+        )
+
+        if status == "idle":
             return
+
         time.sleep(0.1)
 
 
@@ -50,7 +59,7 @@ def main():
     ztarget = float(ztarget)
     cycle = int(cycle)
 
-    # esperar que termine el PEPS
+    # esperar a que PEPS termine realmente
     wait_idle()
 
     value = read_eddy_value()
