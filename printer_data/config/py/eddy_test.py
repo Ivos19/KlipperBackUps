@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 print("DEBUG argv:", sys.argv)
+print(f"NX={nx} NY={ny} SX={sx} SY={sy} Z={ztarget} CYCLE={cycle}")
 import time
 import json
 from pathlib import Path
