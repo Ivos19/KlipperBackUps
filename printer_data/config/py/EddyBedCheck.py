@@ -60,7 +60,7 @@ def main():
     cycle = int(cycle)
 
     # esperar a que PEPS termine realmente
-    wait_idle()
+    # wait_idle()
 
     value = read_eddy_value()
     print(f"Eddy Z = {value:.6f}")
