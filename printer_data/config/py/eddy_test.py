@@ -23,13 +23,6 @@ def read_eddy_value():
 
 def main():
     print("Main py script")
-    attr1 = sys.argv[1]
-    attr2 = sys.argv[2]
-    attr3 = sys.argv[3]
-
-    print(f"Attribute 1: {attr1}")
-    print(f"Attribute 2: {attr2}")
-    print(f"Attribute 3: {attr3}")
     
     if len(sys.argv) != 7:
         print("ARGS INVALIDOS")
