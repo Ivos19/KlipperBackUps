@@ -22,6 +22,16 @@ def read_eddy_value():
     except:
         return None
 
+def wait_idle():
+    while True:
+        r = requests.get(
+            f"{MOONRAKER}/printer/objects/query",
+            params={"toolhead": ""}
+        ).json()
+        if r["result"]["status"]["toolhead"]["status"] == "idle":
+            break
+        time.sleep(0.1)
+
 def main():
     print("Main py script")
     
