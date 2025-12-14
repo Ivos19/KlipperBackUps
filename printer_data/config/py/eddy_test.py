@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-OUTPUT = Path("/home/biqu/printer_data/config/py") #Path("/home/pi/klipper_logs/eddy_test")
+OUTPUT = Path("/home/biqu/printer_data/config/py")
 MOONRAKER = "http://127.0.0.1:7125"
 OBJ = "probe_eddy_ng btt_eddy"
 
