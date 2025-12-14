@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 print("DEBUG argv:", sys.argv)
-print({sys.argv.nx} {sys.argv.ny} {sys.argv.sx} {sys.argv.sy} {sys.argv.ztarget} {sys.argv.cycle})
+print("nx: " sys.argv[1])
 import time
 import json
 from pathlib import Path
