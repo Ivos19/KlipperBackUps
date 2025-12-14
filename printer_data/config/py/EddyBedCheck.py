@@ -10,7 +10,7 @@ OUTPUT = Path("/home/biqu/printer_data/config/py")
 def read_eddy_value():
 
     # Lee el valor del Eddy NG desde la API de Klipper (consulta stats)
-
+    import requests
     print("Lee el valor del Eddy NG desde la API de Klipper (consulta stats)")
     try:
         import requests
