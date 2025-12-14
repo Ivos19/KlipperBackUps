@@ -4,43 +4,44 @@ import time
 import json
 from pathlib import Path
 from datetime import datetime
+import urllib.request
 
-OUTPUT = Path("/home/biqu/printer_data/config/py")
+MOONRAKER = "http://127.0.0.1:7125"
+OBJ = "probe_eddy_ng btt_eddy"
 
-def read_eddy_value():
+OUTPUT = Path("/home/biqu/printer_data/config/py/EddyBedCheck.json")
 
-    # Lee el valor del Eddy NG desde la API de Klipper (consulta stats)
-    import requests
-    print("Lee el valor del Eddy NG desde la API de Klipper (consulta stats)")
-    try:
-        import requests
-        r = requests.get(
-        f"{MOONRAKER}/printer/objects/query",
-        params={OBJ: ""}
-        ).json()
-        print("Z obtenido: ")
-        print(r["last_z_result"])
-        return r["last_z_result"]
-    except:
-        return None
+
+def moonraker_get(path, params=None):
+    if params:
+        query = "&".join(f"{k}=" for k in params.keys())
+        url = f"{MOONRAKER}{path}?{query}"
+    else:
+        url = f"{MOONRAKER}{path}"
+
+    with urllib.request.urlopen(url, timeout=2) as r:
+        return json.loads(r.read().decode())
+
 
 def wait_idle():
     while True:
-        r = requests.get(
-            f"{MOONRAKER}/printer/objects/query",
-            params={"toolhead": ""}
-        ).json()
+        r = moonraker_get("/printer/objects/query", {"toolhead": ""})
         if r["result"]["status"]["toolhead"]["status"] == "idle":
-            break
+            return
         time.sleep(0.1)
+
+
+def read_eddy_value():
+    r = moonraker_get("/printer/objects/query", {OBJ: ""})
+    return r["result"]["status"][OBJ]["last_z_result"]
+
 
 def main():
     print("Main py script")
-    
-    # Validación más informativa
+
     if len(sys.argv) != 7:
-        print(f"ARGS INVALIDOS: esperaba 7, recibí {len(sys.argv)}")
-        print(f"Argumentos recibidos: {sys.argv}")
+        print(f"ARGS INVALIDOS: esperaba 6, recibí {len(sys.argv)-1}")
+        print("Recibido:", sys.argv)
         return
 
     nx, ny, sx, sy, ztarget, cycle = sys.argv[1:]
@@ -49,24 +50,23 @@ def main():
     ztarget = float(ztarget)
     cycle = int(cycle)
 
-    # leer Eddy
-    # wait_idle()
+    # esperar que termine el PEPS
+    wait_idle()
+
     value = read_eddy_value()
+    print(f"Eddy Z = {value:.6f}")
 
-    # asegurar carpeta
-    OUTPUT.mkdir(parents=True, exist_ok=True)
-
-    # Guardar en JSON
     entry = {
         "timestamp": datetime.now().isoformat(),
         "cycle": cycle,
         "nozzle": [nx, ny],
         "sensor": [sx, sy],
         "target_z": ztarget,
-        "eddy": value,
+        "eddy": value
     }
 
-    with open(OUTPUT / "EddyBedCheck.json", "a") as f:
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    with open(OUTPUT, "a") as f:
         f.write(json.dumps(entry) + "\n")
 
 
