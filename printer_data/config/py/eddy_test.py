@@ -24,6 +24,7 @@ def read_eddy_value():
         print(f"Valor en z: {data["last_z_result"]}")
         return data["last_z_result"]
     except:
+        print(f"Fallo lectura de api")
         return None
 
 def gcode(cmd):
