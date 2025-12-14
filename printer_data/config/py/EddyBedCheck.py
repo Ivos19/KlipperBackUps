@@ -18,7 +18,8 @@ def read_eddy_value():
         f"{MOONRAKER}/printer/objects/query",
         params={OBJ: ""}
         ).json()
-        print(f"Valor leido {r["last_z_result"}")
+        print("Z obtenido: ")
+        print(r["last_z_result"])
         return r["last_z_result"]
     except:
         return None
