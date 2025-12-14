@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import sys
 print("DEBUG argv:", sys.argv)
+print("DEBUG len(sys.argv):", len(sys.argv))
+print("DEBUG sys.argv[1:]:", sys.argv[1:] if len(sys.argv) > 1 else "NO ARGS")
 import time
 import json
 from pathlib import Path
@@ -24,8 +26,10 @@ def read_eddy_value():
 def main():
     print("Main py script")
     
+    # Validación más informativa
     if len(sys.argv) != 7:
-        print("ARGS INVALIDOS")
+        print(f"ARGS INVALIDOS: esperaba 7, recibí {len(sys.argv)}")
+        print(f"Argumentos recibidos: {sys.argv}")
         return
 
     nx, ny, sx, sy, ztarget, cycle = sys.argv[1:]
