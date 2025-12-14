@@ -50,7 +50,7 @@ def main():
     cycle = int(cycle)
 
     # leer Eddy
-    wait_idle()
+    # wait_idle()
     value = read_eddy_value()
 
     # asegurar carpeta
