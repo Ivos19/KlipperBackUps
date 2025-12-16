@@ -7,19 +7,41 @@ from datetime import datetime
 
 OUTPUT = Path("/home/biqu/printer_data/config/py")
 MOONRAKER = "http://127.0.0.1:7125"
-OBJ = "probe_eddy_ng btt_eddy"
+
+OBJ_EDDY = "probe_eddy_ng btt_eddy"
+OBJ_TOOLHEAD = "toolhead"
+
 
 def read_eddy_value():
     try:
         r = requests.get(
             f"{MOONRAKER}/printer/objects/query",
-            params={OBJ: ""}
+            params={OBJ_EDDY: ""}
         ).json()
 
-        return r["result"]["status"][OBJ]["last_z_result"]
+        return r["result"]["status"][OBJ_EDDY]["last_z_result"]
     except Exception as e:
         print("ERROR leyendo Eddy:", e)
         return None
+
+
+def read_toolhead_position():
+    try:
+        r = requests.get(
+            f"{MOONRAKER}/printer/objects/query",
+            params={OBJ_TOOLHEAD: ""}
+        ).json()
+
+        pos = r["result"]["status"]["toolhead"]["position"]
+        return {
+            "x": pos[0],
+            "y": pos[1],
+            "z": pos[2],
+        }
+    except Exception as e:
+        print("ERROR leyendo posición del cabezal:", e)
+        return None
+
 
 def main():
     print("Main py script")
@@ -34,22 +56,32 @@ def main():
     ztarget = float(ztarget)
     cycle = int(cycle)
 
-    value = read_eddy_value()
-    print("EDDY =", value)
+    eddy_value = read_eddy_value()
+    toolhead_pos = read_toolhead_position()
+
+    print("EDDY =", eddy_value)
+    print("TOOLHEAD =", toolhead_pos)
 
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
     entry = {
         "timestamp": datetime.now().isoformat(),
         "cycle": cycle,
-        "nozzle": [nx, ny],
-        "sensor": [sx, sy],
+
+        # Posiciones planeadas / teóricas
+        "nozzle_cmd": [nx, ny],
+        "sensor_cmd": [sx, sy],
+
+        # Posición real reportada por Klipper
+        "toolhead_real": toolhead_pos,
+
         "target_z": ztarget,
-        "eddy": value,
+        "eddy": eddy_value,
     }
 
     with open(OUTPUT / "EddyBedCheck.json", "a") as f:
         f.write(json.dumps(entry) + "\n")
+
 
 if __name__ == "__main__":
     main()
