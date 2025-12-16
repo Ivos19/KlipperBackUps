@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+from collections import defaultdict
+import matplotlib.pyplot as plt
+import math
+from datetime import datetime
+
+FILE = Path("/home/biqu/printer_data/config/py/EddyBedCheck.json")
+LAST_N = 15
+
+
+def load_last_entries(path, n):
+    with open(path, "r") as f:
+        lines = f.readlines()
+
+    lines = lines[-n:]
+    return [json.loads(line) for line in lines]
+
+
+def main():
+    data = load_last_entries(FILE, LAST_N)
+
+    # ciclos ordenados
+    cycles = sorted({d["cycle"] for d in data})
+
+    # agrupar por posición del sensor
+    positions = defaultdict(dict)
+    for d in data:
+        pos = tuple(d["sensor_cmd"])
+        positions[pos][d["cycle"]] = d["eddy"]
+
+    n_plots = len(positions)
+    cols = 3
+    rows = math.ceil(n_plots / cols)
+
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * 5, rows * 4))
+    axes = axes.flatten()
+
+    for ax, (pos, values) in zip(axes, positions.items()):
+        eddy_vals = [values.get(c, 0) for c in cycles]
+
+        bars = ax.bar(cycles, eddy_vals)
+        ax.set_title(f"Sensor {pos}")
+        ax.set_xlabel("Ciclo")
+        ax.set_ylabel("Eddy")
+
+        for bar, val in zip(bars, eddy_vals):
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar.get_height(),
+                f"{val:.3f}",
+                ha="center",
+                va="bottom",
+                fontsize=8
+            )
+
+    # ocultar subplots vacíos
+    for i in range(len(positions), len(axes)):
+        axes[i].axis("off")
+
+    fig.suptitle("Eddy NG – Última corrida (15 mediciones)", fontsize=14)
+    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+    # ---- GUARDAR IMAGEN ----
+    out_img = FILE.parent / f"EddyBedCheck_last_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+    fig.savefig(out_img, dpi=150)
+    plt.close(fig)
+
+    print(f"Imagen guardada en: {out_img}")
+
+
+if __name__ == "__main__":
+    main()
