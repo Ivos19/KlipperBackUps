@@ -7,3 +7,4 @@
 {"timestamp": "2025-12-16T01:08:26.050860", "cycle": 1, "nozzle_cmd": [250.0, 98.0], "sensor_cmd": [250.0, 50.0], "toolhead_real": {"x": 250.0, "y": 98.0, "z": 1.0}, "target_z": 1.0, "eddy": 0.8886373963154429}
 {"timestamp": "2025-12-16T01:08:28.809209", "cycle": 1, "nozzle_cmd": [250.0, 298.0], "sensor_cmd": [250.0, 250.0], "toolhead_real": {"x": 250.0, "y": 298.0, "z": 1.0}, "target_z": 1.0, "eddy": 1.0856202558145913}
 {"timestamp": "2025-12-16T01:08:31.566371", "cycle": 1, "nozzle_cmd": [50.0, 298.0], "sensor_cmd": [50.0, 250.0], "toolhead_real": {"x": 50.0, "y": 298.0, "z": 1.0}, "target_z": 1.0, "eddy": 0.9790552906494474}
+{"timestamp": "2025-12-16T01:08:34.071683", "cycle": 1, "nozzle_cmd": [150.0, 198.0], "sensor_cmd": [150.0, 150.0], "toolhead_real": {"x": 150.0, "y": 198.0, "z": 1.0}, "target_z": 1.0, "eddy": 0.9781027267311131}
