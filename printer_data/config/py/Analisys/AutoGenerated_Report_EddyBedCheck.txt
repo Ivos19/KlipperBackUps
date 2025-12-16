@@ -1,0 +1,45 @@
+EDDY BED CHECK REPORT
+Generated : 2025-12-16T01:34:21.670617
+Samples   : 15
+Cycles    : 3
+Target Z  : 1.0000
+
+POINT         SENSOR       NOZZLE       CYCLE   EDDY     ΔvsAVG
+----------------------------------------------------------------------
+BACK-RIGHT    ( 50, 50)   ( 50, 98)      0    0.9410  +0.0074
+BACK-RIGHT    ( 50, 50)   ( 50, 98)      1    0.9265  -0.0072
+BACK-RIGHT    ( 50, 50)   ( 50, 98)      2    0.9335  -0.0002
+--> BACK-RIGHT POINT DELTA: 0.0145 mm
+
+BACK-LEFT     (250, 50)   (250, 98)      0    0.8568  -0.0004
+BACK-LEFT     (250, 50)   (250, 98)      1    0.8552  -0.0020
+BACK-LEFT     (250, 50)   (250, 98)      2    0.8597  +0.0024
+--> BACK-LEFT POINT DELTA: 0.0045 mm
+
+FRONT-LEFT    (250,250)   (250,298)      0    0.9776  -0.0017
+FRONT-LEFT    (250,250)   (250,298)      1    0.9837  +0.0044
+FRONT-LEFT    (250,250)   (250,298)      2    0.9766  -0.0027
+--> FRONT-LEFT POINT DELTA: 0.0071 mm
+
+FRONT-RIGHT   ( 50,250)   ( 50,298)      0    0.9270  +0.0020
+FRONT-RIGHT   ( 50,250)   ( 50,298)      1    0.9230  -0.0020
+FRONT-RIGHT   ( 50,250)   ( 50,298)      2    0.9250  -0.0000
+--> FRONT-RIGHT POINT DELTA: 0.0040 mm
+
+CENTER        (150,150)   (150,198)      0    0.9204  +0.0000
+CENTER        (150,150)   (150,198)      1    0.9184  -0.0020
+CENTER        (150,150)   (150,198)      2    0.9225  +0.0020
+--> CENTER POINT DELTA: 0.0040 mm
+
+
+=== BED SUMMARY ===
+
+Lowest eddy value  : 0.8552 (BACK-LEFT, cycle 1)
+Highest eddy value : 0.9837 (FRONT-LEFT, cycle 1)
+
+TOTAL BED DELTA    : 0.1285 mm
+Global average     : 0.9231
+Std deviation      : 0.0405
+
+Most unstable point: BACK-RIGHT (Δ=0.0145)
+Most stable point  : CENTER (Δ=0.0040)
