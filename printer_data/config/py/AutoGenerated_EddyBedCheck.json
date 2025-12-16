@@ -1,0 +1,2 @@
+{"timestamp": "2025-12-16T00:28:17.124694", "cycle": 0, "nozzle_cmd": [50.0, 98.0], "sensor_cmd": [50.0, 50.0], "toolhead_real": {"x": 50.0, "y": 98.0, "z": 1.0}, "target_z": 1.0, "eddy": 2.7023305532941038}
+{"timestamp": "2025-12-16T00:28:19.637137", "cycle": 0, "nozzle_cmd": [250.0, 98.0], "sensor_cmd": [250.0, 50.0], "toolhead_real": {"x": 250.0, "y": 98.0, "z": 1.0}, "target_z": 1.0, "eddy": 0.9235382868701795}
