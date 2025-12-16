@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+from collections import defaultdict
+import matplotlib.pyplot as plt
+import math
+from datetime import datetime
+
+FILE = Path("/home/biqu/printer_data/config/py/EddyBedCheck.json")
+LAST_N = 15
+
+
+def load_last_entries(path, n):
+    with open(path, "r") as f:
+        lines = f.readlines()
+    return [json.loads(l) for l in lines[-n:]]
+
+
+def classify_position(pos, xs, ys):
+    x, y = pos
+    if x == min(xs) and y == min(ys):
+        return "Atrás derecha"
+    if x == max(xs) and y == max(ys):
+        return "Adelante izquierda"
+    if x == min(xs) and y == max(ys):
+        return "Adelante derecha"
+    if x == max(xs) and y == min(ys):
+        return "Atrás izquierda"
+    return "Centro"
+
+
+def generate_plot(data, out_img):
+    cycles = sorted({d["cycle"] for d in data})
+
+    positions = defaultdict(dict)
+    for d in data:
+        positions[tuple(d["sensor_cmd"])][d["cycle"]] = d["eddy"]
+
+    xs = [p[0] for p in positions]
+    ys = [p[1] for p in positions]
+
+    cols = 3
+    rows = math.ceil(len(positions) / cols)
+
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * 5, rows * 4))
+    axes = axes.flatten()
+
+    summary = []
+
+    for ax, (pos, values) in zip(axes, positions.items()):
+        eddy_vals = [values.get(c, 0) for c in cycles]
+        label = classify_position(pos, xs, ys)
+
+        bars = ax.bar(cycles, eddy_vals)
+        ax.set_title(f"{label} {pos}")
+        ax.set_xlabel("Ciclo")
+        ax.set_ylabel("Eddy")
+
+        for bar, val in zip(bars, eddy_vals):
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar.get_height(),
+                f"{val:.3f}",
+                ha="center",
+                va="bottom",
+                fontsize=8
+            )
+
+        summary.append({
+            "pos": pos,
+            "label": label,
+            "min": min(eddy_vals),
+            "max": max(eddy_vals),
+            "delta": max(eddy_vals) - min(eddy_vals),
+        })
+
+    for i in range(len(positions), len(axes)):
+        axes[i].axis("off")
+
+    fig.suptitle("Eddy NG – Última corrida", fontsize=14)
+    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+    fig.savefig(out_img, dpi=150)
+    plt.close(fig)
+
+    return summary
+
+
+def generate_html(summary, img_path, out_html):
+    rows = ""
+    for s in summary:
+        rows += f"""
+        <tr>
+            <td>{s['label']}</td>
+            <td>{s['pos'][0]:.1f}, {s['pos'][1]:.1f}</td>
+            <td>{s['min']:.4f}</td>
+            <td>{s['max']:.4f}</td>
+            <td>{s['delta']:.4f}</td>
+        </tr>
+        """
+
+    html = f"""
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Eddy NG – Reporte automático</title>
+<style>
+body {{ font-family: Arial, sans-serif; background: #111; color: #eee; }}
+h1 {{ color: #6cf; }}
+table {{ border-collapse: collapse; margin-top: 20px; }}
+th, td {{ border: 1px solid #555; padding: 6px 10px; text-align: center; }}
+th {{ background: #222; }}
+img {{ max-width: 100%; border: 1px solid #444; margin-top: 20px; }}
+</style>
+</head>
+<body>
+<h1>Reporte Eddy NG</h1>
+<p><b>Fecha:</b> {datetime.now().isoformat()}</p>
+
+<h2>Resumen por posición</h2>
+<table>
+<tr>
+<th>Zona</th>
+<th>Sensor XY</th>
+<th>Eddy mín</th>
+<th>Eddy máx</th>
+<th>Δ</th>
+</tr>
+{rows}
+</table>
+
+<h2>Gráficos</h2>
+<img src="{img_path.name}" alt="Eddy plot">
+
+</body>
+</html>
+"""
+
+    out_html.write_text(html, encoding="utf-8")
+
+
+def main():
+    data = load_last_entries(FILE, LAST_N)
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    out_img = FILE.parent / f"EddyBedCheck_{ts}.png"
+    out_html = FILE.parent / f"EddyBedCheck_{ts}.html"
+
+    summary = generate_plot(data, out_img)
+    generate_html(summary, out_img, out_html)
+
+    print("Reporte generado:")
+    print(out_img)
+    print(out_html)
+
+
+if __name__ == "__main__":
+    main()
