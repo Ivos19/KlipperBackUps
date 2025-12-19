@@ -13,7 +13,6 @@ if len(sys.argv) < 2:
 
 gcode_path = Path(sys.argv[1])
 
-
 if not gcode_path.exists():
     sys.exit(0)
 
