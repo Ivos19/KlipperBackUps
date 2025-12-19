@@ -11,12 +11,10 @@ payload = {
 print("--Enviando macro a Klipper...")
 
 try:
-
 r = requests.post(
     f"{MOONRAKER_URL}/printer/gcode/script",
     json=payload,
     timeout=5
 )
-
 except requests.exceptions.RequestException:
     pass  # IGNORAR COMPLETAMENTE
