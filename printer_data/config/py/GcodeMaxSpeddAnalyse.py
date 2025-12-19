@@ -64,5 +64,5 @@ try:
     else:
         print(f"Error ejecutando macro {macro}")
         print(r.text)
-except Exception as e:
-    print(f"DEBUG: Error enviando macro a Moonraker: {e}")
+except requests.exceptions.RequestException:
+    pass  # IGNORAR COMPLETAMENTE
