@@ -5,8 +5,6 @@ import requests
 from pathlib import Path
 
 MOONRAKER_URL = "http://127.0.0.1:7125"
-TARGET_MACRO = "MAX_SPEED_DATA"
-TARGET_VARIABLE = "value"
 
 if len(sys.argv) < 2:
     sys.exit(0)
@@ -49,4 +47,4 @@ try:
         timeout=0.5
     )
 except requests.exceptions.RequestException:
-    pass  # IGNORAR COMPLETAMENTE
+    pass
