@@ -14,7 +14,7 @@ try:
   requests.post(
       f"{MOONRAKER_URL}/printer/gcode/script",
       json=payload,
-      timeout=5
+      timeout=1
   )
 except requests.exceptions.RequestException:
     pass  # IGNORAR COMPLETAMENTE
