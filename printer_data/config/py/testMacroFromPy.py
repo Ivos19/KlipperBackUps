@@ -15,9 +15,3 @@ r = requests.post(
     json=payload,
     timeout=5
 )
-
-if r.status_code == 200:
-    print("--Macro ejecutado correctamente")
-else:
-    print("Error ejecutando macro")
-    print(r.text)
