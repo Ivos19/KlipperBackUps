@@ -8,7 +8,7 @@ payload = {
     "script": macro
 }
 
-print("Enviando macro a Klipper...")
+print("--Enviando macro a Klipper...")
 
 r = requests.post(
     f"{MOONRAKER_URL}/printer/gcode/script",
@@ -17,7 +17,7 @@ r = requests.post(
 )
 
 if r.status_code == 200:
-    print("Macro ejecutado correctamente")
+    print("--Macro ejecutado correctamente")
 else:
     print("Error ejecutando macro")
     print(r.text)
