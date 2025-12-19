@@ -56,7 +56,7 @@ try:
     r = requests.post(
         f"{MOONRAKER_URL}/printer/gcode/script",
         json=payload,
-        timeout=5
+        timeout=0.5
     )
     
     if r.status_code == 200:
